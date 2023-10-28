@@ -20,7 +20,8 @@
             bottom_bar: {enabled: false, ignoreModules: [], overrideTransitionInterval: 10000},
             slides: [
                 []
-            ]
+            ],
+            slideLengths: []
         },
 
         notificationReceived: function (notification) {
@@ -51,6 +52,7 @@
 
             if (this.config.mode === 'slides') {
                 modules.slides = this.config.slides;
+                modules.slideLengths = this.config.slideLengths;
             }
 
             if (positionIndex !== null) {
@@ -60,9 +62,11 @@
             }
 
             modules.currentIndex = -1;
+            modules.self = this;
+            
             this.moduleTransition.call(modules);
             // We set a timer to cause the page transitions
-            this.transitionTimer = setInterval(this.moduleTransition.bind(modules), timer);
+            // this.transitionTimer = setInterval(this.moduleTransition.bind(modules), timer);
         },
 
         moduleTransition: function () {
@@ -85,6 +89,17 @@
                     this[i].hide(0);
                 }
             }
+
+            if(this.slideLengths[this.currentIndex] !== undefined && this.slideLengths[this.currentIndex] > 0) {
+                setTimeout(this.self.moduleTransition.bind(this), this.slideLengths[this.currentIndex]);
+            }
+            else if(this.self.config[this.currentIndex] !== undefined && this.self.config[this.currentIndex].overrideTransitionInterval !== undefined && this.self.config[this.currentIndex].overrideTransitionInterval > 0) {
+                setTimeout(this.self.moduleTransition.bind(this), this.self.config[this.currentIndex].overrideTransitionInterval);
+            }
+            else {
+                setTimeout(this.self.moduleTransition.bind(this), this.self.config.transitionInterval);
+            }
+            
         }
     });
 }());
