@@ -179,7 +179,8 @@ var config = {
                     ['MMM-fitbit']
                 ],
 		slideLengths: [
-		    // in this example, slide 1 will stay on screen for 5 seconds, slide 2 for 10 seconds, and slide 3 for 15 seconds
+		    // in this example, slide 1 will stay on screen for 5 seconds,
+			// slide 2 for 10 seconds, and slide 3 for 15 seconds
 		    5000, 10000, 15000
 		]
             }
