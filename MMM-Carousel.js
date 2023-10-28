@@ -63,7 +63,6 @@
             }
 
             modules.currentIndex = -1;
-            
             this.moduleTransition.call(modules);
 
             // if not slide mode, we set a timer to cause the page transitions
