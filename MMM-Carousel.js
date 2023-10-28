@@ -65,8 +65,7 @@
             modules.self = this;
             
             this.moduleTransition.call(modules);
-            // We set a timer to cause the page transitions
-            // this.transitionTimer = setInterval(this.moduleTransition.bind(modules), timer);
+            
         },
 
         moduleTransition: function () {
