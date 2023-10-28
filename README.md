@@ -94,10 +94,18 @@ The following properties can be configured:
 		</tr>
 		<tr>
         			<td><code>slides</code></td>
-        			<td>An array of string arrays.  Each string array is a list of content for an individual slide.  The slides will be rotated as a complete set using the <code>transitionInterval</code> setting.  Ingnored modules (<code>ignoreModules</code>) will be diplayed on all slides.
+        			<td>An array of string arrays.  Each string array is a list of content for an individual slide.  The slides will be rotated as a complete set using the <code>transitionInterval</code> setting.  Ignored modules (<code>ignoreModules</code>) will be diplayed on all slides.
         				<br> <br> This value is <b>OPTIONAL</b>
         				<br><b>Possible values:</b> <code>array of String array</code>
                         <br><b>Default value:</b> <code>[[]]</code>
+        			</td>
+        		</tr>
+		<tr>
+        			<td><code>slideLengths</code></td>
+        			<td>An array of integers.  Each integer is the length of time an individual slide will remain active on screen, in milliseconds.  If these values are not provided for a given slide, will fall back first to the <code>overrideTransitionInterval</code> setting, if present, then to the <code>transitionInterval</code> if no <code>overrideTransitionInterval</code> or <code>slideLengths</code> value is set.  
+        				<br> <br> This value is <b>OPTIONAL</b>
+        				<br><b>Possible values:</b> <code>array of integers</code>
+                        <br><b>Default value:</b> <code>[]</code>
         			</td>
         		</tr>
 	</tbody>
@@ -135,7 +143,7 @@ var config = {
     ]
 }
 ```
-#### Example - Slides Carousel
+#### Example - Slides Carousel with uniform timed transitions
 ```javascript
 var config = {
     modules: [
@@ -150,6 +158,30 @@ var config = {
                     ['weatherforecast', 'MMM-Trello', 'planetrise', 'newsfeed'],
                     ['MMM-fitbit']
                 ]
+            }
+        }
+    ]
+}
+```
+#### Example - Slides Carousel with individual times per slide
+```javascript
+var config = {
+    modules: [
+        {
+            module: 'MMM-Carousel',
+            config: {
+                transitionInterval: 10000,
+                ignoreModules: ['clock', 'alert'],
+                mode: 'slides',
+                slides: [
+                    ['calendar', 'compliments', 'currentweather'],
+                    ['weatherforecast', 'MMM-Trello', 'planetrise', 'newsfeed'],
+                    ['MMM-fitbit']
+                ],
+		slideLengths: [
+		    // in this example, slide 1 will stay on screen for 5 seconds, slide 2 for 10 seconds, and slide 3 for 15 seconds
+		    5000, 10000, 15000
+		]
             }
         }
     ]
