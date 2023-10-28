@@ -20,7 +20,8 @@
             bottom_bar: {enabled: false, ignoreModules: [], overrideTransitionInterval: 10000},
             slides: [
                 []
-            ]
+            ],
+            slideLengths: []
         },
 
         notificationReceived: function (notification) {
@@ -51,6 +52,8 @@
 
             if (this.config.mode === 'slides') {
                 modules.slides = this.config.slides;
+                modules.slideLengths = this.config.slideLengths;
+                modules.self = this;
             }
 
             if (positionIndex !== null) {
@@ -61,8 +64,13 @@
 
             modules.currentIndex = -1;
             this.moduleTransition.call(modules);
-            // We set a timer to cause the page transitions
-            this.transitionTimer = setInterval(this.moduleTransition.bind(modules), timer);
+
+            // if not slide mode, we set a timer to cause the page transitions
+            if(this.config.mode !== 'slides') {
+                this.transitionTimer = setInterval(this.moduleTransition.bind(modules), timer);
+            }
+            // if slides mode, we're going to do the transitions in via setTimeout in the actual transition function so do nothing here
+            
         },
 
         moduleTransition: function () {
@@ -85,6 +93,26 @@
                     this[i].hide(0);
                 }
             }
+
+            // only do the transitions here if we're in slides mode
+            if(this.self.config.mode === 'slides') {
+                if(this.slideLengths[this.currentIndex] !== undefined && this.slideLengths[this.currentIndex] > 0) {
+                    console.log('slideLengths value (' + this.slideLengths[this.currentIndex] + ') found');
+                    console.log('Staying on this slide for: ' + (this.slideLengths[this.currentIndex] / 1000) + ' seconds');
+                    setTimeout(this.self.moduleTransition.bind(this), this.slideLengths[this.currentIndex]);
+                }
+                else if(this.self.config[this.currentIndex] !== undefined && this.self.config[this.currentIndex].overrideTransitionInterval !== undefined && this.self.config[this.currentIndex].overrideTransitionInterval > 0) {
+                    console.log('slideLengths value not found, but overrideTransitionInterval (' + this.self.config[this.currentIndex].overrideTransitionInterval + ') set');
+                    console.log('Staying on this slide for ' + (this.self.config[this.currentIndex].overrideTransitionInterval / 1000) + ' seconds');
+                    setTimeout(this.self.moduleTransition.bind(this), this.self.config[this.currentIndex].overrideTransitionInterval);
+                }
+                else {
+                    console.log('slideLengths value not found and overrideTransitionInterval not set, falling back to transitionInterval (' + this.self.config.transitionInterval + ')');
+                    console.log('Staying on this slide for ' + (this.self.config.transitionInterval / 1000) + ' seconds');
+                    setTimeout(this.self.moduleTransition.bind(this), this.self.config.transitionInterval);
+                }
+            }
+            
         }
     });
 }());
