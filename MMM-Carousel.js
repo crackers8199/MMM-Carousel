@@ -53,6 +53,7 @@
             if (this.config.mode === 'slides') {
                 modules.slides = this.config.slides;
                 modules.slideLengths = this.config.slideLengths;
+                modules.self = this;
             }
 
             if (positionIndex !== null) {
@@ -62,7 +63,6 @@
             }
 
             modules.currentIndex = -1;
-            modules.self = this;
             
             this.moduleTransition.call(modules);
 
